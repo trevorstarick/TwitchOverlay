@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import socket,sys,requests,time,os
+import socket,sys,urllib2,time,os,json
 
 # Screen clearing magic
 
@@ -50,8 +50,9 @@ currentTime = time.time()+30
 while 1:
 	if currentTime >= initialTime+30:
 		cls()
-		r = requests.get('http://api.justin.tv/api/stream/summary.json?channel='+Channel[1:])
-		print bcolors.OKGREEN+'Connected as '+bcolors.ENDC+bcolors.HEADER+User+bcolors.OKGREEN+' on channel '+bcolors.HEADER+Channel[1:]+bcolors.ENDC+'! '+bcolors.WARNING+'Viewer count: '+bcolors.ENDC+str(r.json()['viewers_count'])
+		res = urllib2.urlopen('http://api.justin.tv/api/stream/summary.json?channel='+Channel[1:])
+		data = json.load(res)
+		print bcolors.OKGREEN+'Connected as '+bcolors.ENDC+bcolors.HEADER+User+bcolors.OKGREEN+' on channel '+bcolors.HEADER+Channel[1:]+bcolors.ENDC+'! '+bcolors.WARNING+'Viewer count: '+bcolors.ENDC+str(data['viewers_count'])
 		initialTime = time.time()
 		currentTime = time.time()
 	else:
